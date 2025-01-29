@@ -46,7 +46,7 @@ const MyCalendar = () => {
 
     return (
         <div className="calendar-container">
-            <h1>My Calendar</h1>
+            <h1>Food Planner</h1>
             <Calendar
                 onChange={onChange}
                 value={date}

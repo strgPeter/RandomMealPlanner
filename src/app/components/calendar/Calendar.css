@@ -2,7 +2,6 @@
 .react-calendar {
     width: 100%;
     max-width: 800px;
-    margin: auto;
     border: 1px solid #000000;
     border-radius: 8px;
     padding: 1rem;
@@ -27,16 +26,43 @@
     border: 1px solid #000000 !important;
     border-top: 0 !important;
     border-left: 0 !important;
-    color: #27ae60; /* Day numbers color */
+    color: #000000; /* Day numbers color */
+    min-height: 160px;
+    /* New layout properties */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 4px;
+}
+
+.react-calendar__month-view__days {
+    border-left: 1px solid #000000;
+}
+
+.react-calendar__tile abbr {
+    display: block;
+    margin-bottom: auto; /* Push to top */
+    padding: 2px;
 }
 
 .react-calendar__tile--now {
-    color: #c0392b !important; /* Today's date color */
+    color: #18ab24 !important; /* Today's date color */
+}
+
+.event-badge {
+    width: 100%;
+    margin-top: auto; /* Push events to bottom */
+    flex: 1;
+    overflow: auto;
 }
 
 .event-item {
-    color: #2c3e50; /* Event text color */
+    color: #2c3e50;
     background-color: #ffecb3;
+    margin: 2px 0;
+    padding: 2px;
+    font-size: 0.8em;
 }
 
 .selected-date-info {
