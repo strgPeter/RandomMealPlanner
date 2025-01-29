@@ -1,0 +1,49 @@
+/* components/Calendar/styles.css */
+.react-calendar {
+    width: 100%;
+    max-width: 800px;
+    margin: auto;
+    border: 1px solid #000000;
+    border-radius: 8px;
+    padding: 1rem;
+    color: #2c3e50; /* Base text color */
+}
+
+.react-calendar__navigation button {
+    color: #34495e;
+    font-weight: bold;
+}
+
+.react-calendar__month-view__weekdays {
+    border-bottom: 1px solid #000000;
+    color: #3c9ae7;
+    font-weight: bolder;
+    font-size: larger;
+    text-transform: uppercase;
+}
+
+.react-calendar__tile {
+    position: relative;
+    border: 1px solid #000000 !important;
+    border-top: 0 !important;
+    border-left: 0 !important;
+    color: #27ae60; /* Day numbers color */
+}
+
+.react-calendar__tile--now {
+    color: #c0392b !important; /* Today's date color */
+}
+
+.event-item {
+    color: #2c3e50; /* Event text color */
+    background-color: #ffecb3;
+}
+
+.selected-date-info {
+    color: #2980b9; /* Selected date text color */
+}
+
+.react-calendar__tile {
+    background-color: #ffffff;
+    min-height: 160px; /* Minimum cell height */
+}
