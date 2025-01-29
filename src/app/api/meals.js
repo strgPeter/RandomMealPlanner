@@ -87,6 +87,34 @@ export function getAllMeals() {
  *
  * @param {import("next").NextApiRequest} req - The API request object.
  * @param {import("next").NextApiResponse} res - The API response object.
+ *
+ * Example API calls from the frontend:
+ * 
+ * **POST (Insert Meal) Example:**
+ * ```javascript
+ * async function addMeal() {
+ *     const response = await fetch("/api/meals", {
+ *         method: "POST",
+ *         headers: { "Content-Type": "application/json" },
+ *         body: JSON.stringify({
+ *             mealName: "Pasta",
+ *             ingredients: ["Tomato Sauce", "Garlic", "Pasta"]
+ *         }),
+ *     });
+ *
+ *     const data = await response.json();
+ *     console.log(data);
+ * }
+ * ```
+ *
+ * **GET (Fetch All Meals) Example:**
+ * ```javascript
+ * async function fetchMeals() {
+ *     const response = await fetch("/api/meals");
+ *     const meals = await response.json();
+ *     console.log(meals);
+ * }
+ * ```
  */
 export default function handler(req, res) {
     if (req.method === "POST") {
@@ -99,30 +127,3 @@ export default function handler(req, res) {
         res.status(405).json({ error: "Method Not Allowed" });
     }
 }
-/*
-How to Call This API from React?
-
-POST (Insert Meal) Example
-async function addMeal() {
-    const response = await fetch("/api/meals", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            mealName: "Pasta",
-            ingredients: ["Tomato Sauce", "Garlic", "Pasta"]
-        }),
-    });
-
-    const data = await response.json();
-    console.log(data);
-}
-
-
-GET (Fetch All Meals) Example
-
-async function fetchMeals() {
-    const response = await fetch("/api/meals");
-    const meals = await response.json();
-    console.log(meals);
-}
-*/
