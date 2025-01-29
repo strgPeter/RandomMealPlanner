@@ -5,34 +5,58 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import './Calendar.css';
 
-// Sample events (for demonstration purposes)
-const sampleEvents = {
-    '2025-01-25': ['Meeting with John', 'Doctor Appointment'],
-    '2025-01-28': ['Team meeting', 'Project deadline'],
-    '2025-02-02': ['Birthday Party'],
-};
-
 const MyCalendar = () => {
-    const [date, setDate] = useState(null); // Start with null
-    const [events, setEvents] = useState(sampleEvents);
-    const [isClient, setIsClient] = useState(false); // State to track client-side rendering
+    const [date, setDate] = useState(null);
+    const [events, setEvents] = useState({});
+    const [isClient, setIsClient] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [selectedDay, setSelectedDay] = useState(null);
 
     useEffect(() => {
-        setIsClient(true); // Only set this flag on the client-side
-        setDate(new Date()); // Set the date after the component mounts
+        setIsClient(true);
+        setDate(new Date());
+        const savedEvents = localStorage.getItem('foodPlanner');
+        if (savedEvents) {
+            setEvents(JSON.parse(savedEvents));
+        }
     }, []);
 
-    if (!isClient) {
-        return null; // Render nothing on the server
-    }
+    const generateFoodPlan = async () => {
+        setLoading(true);
+        try {
+            const response = await fetch(null);
+            const data = await response.json();
 
-    const onChange = (date) => {
-        setDate(date);
+            const newEvents = {};
+            const today = new Date();
+
+            data.meals.forEach(meal => {
+                const randomDate = new Date(today);
+                randomDate.setDate(today.getDate() + Math.floor(Math.random() * 30));
+                const dateString = randomDate.toISOString().split('T')[0];
+
+                if (!newEvents[dateString]) {
+                    newEvents[dateString] = [];
+                }
+                newEvents[dateString].push(meal.strMeal);
+            });
+
+            setEvents(newEvents);
+            localStorage.setItem('foodPlanner', JSON.stringify(newEvents));
+        } catch (error) {
+            console.error('Error generating food plan:', error);
+        }
+        setLoading(false);
     };
 
-    // Custom tile content for each day
-    const tileContent = ({ date, view }) => {
-        const dateString = date.toISOString().split('T')[0]; // YYYY-MM-DD format
+    const handleDayClick = (value) => {
+        setSelectedDay(value);
+    };
+
+    if (!isClient) return null;
+
+    const tileContent = ({ date }) => {
+        const dateString = date.toISOString().split('T')[0];
         const dayEvents = events[dateString];
 
         return dayEvents ? (
@@ -47,19 +71,39 @@ const MyCalendar = () => {
     return (
         <div className="calendar-container">
             <h1>Food Planner</h1>
-            <Calendar
-                onChange={onChange}
-                value={date}
-                tileContent={tileContent}
-                className="react-calendar"
-            />
-            <div>
-                <p>Selected Date: {date.toDateString()}</p>
-                <p>
-                    {events[date.toISOString().split('T')[0]]
-                        ? events[date.toISOString().split('T')[0]].join(', ')
-                        : 'No events for this day.'}
-                </p>
+            <div className="layout-wrapper">
+                <Calendar
+                    onChange={setDate}
+                    onClickDay={handleDayClick}
+                    value={date}
+                    tileContent={tileContent}
+                    className="react-calendar"
+                />
+
+                <div className="right-panel">
+                    <button
+                        onClick={generateFoodPlan}
+                        disabled={loading}
+                        className="generate-button"
+                    >
+                        {loading ? 'Generating...' : 'Generate Food Planner'}
+                    </button>
+
+                    {selectedDay && (
+                        <div className="day-events">
+                            <h3>Meals for {selectedDay.toDateString()}</h3>
+                            {events[selectedDay.toISOString().split('T')[0]] ? (
+                                <ul>
+                                    {events[selectedDay.toISOString().split('T')[0]].map((event, index) => (
+                                        <li key={index}>{event}</li>
+                                    ))}
+                                </ul>
+                            ) : (
+                                <p>No meals planned for this day</p>
+                            )}
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     );
