@@ -65,10 +65,10 @@ export async function GET() {
 export async function POST(req) {
     const { mealName, ingredients } = req.body;
     
-            if (!mealName || !Array.isArray(ingredients) || ingredients.length === 0) {
-                return NextResponse.json({ success: false, message: "Invalid input data" });
-            }
+    if (!mealName || !Array.isArray(ingredients) || ingredients.length === 0) {
+        return NextResponse.json({ success: false, message: "Invalid input data" });
+    }
     
-            const result = insertMeal(mealName, ingredients);
-            return NextResponse.json(result);
+    const result = insertMeal(mealName, ingredients);
+    return NextResponse.json(result);
 }
