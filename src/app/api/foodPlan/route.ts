@@ -1,4 +1,5 @@
-import { getAllMeals } from "./meals.js";
+import { getAllMeals } from "../meals.js";
+import {NextResponse} from "next/server";
 
 /**
  * Generates a meal plan for a given month.
@@ -38,7 +39,7 @@ export function generateMealPlan(year, month) {
  * API handler to fetch meal plan based on month and year.
  * 
  */
-export default function handler(req, res) {
+/*export default function handler(req, res) {
     if (req.method === "GET") {
         const { year, month } = req.query;
         if (!year || !month) {
@@ -54,4 +55,8 @@ export default function handler(req, res) {
     } else {
         res.status(405).json({ error: "Method Not Allowed" });
     }
+}*/
+
+export async function GET() {
+    return NextResponse.json(generateMealPlan(2025,1));
 }

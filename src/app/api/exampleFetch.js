@@ -1,4 +1,4 @@
-import { generateMealPlan } from "./getRandomMeals.js"; // Adjust path if needed
+import { generateMealPlan } from "./foodPlan/route.ts"; // Adjust path if needed
 
 // Function to test meal plan generation
 function testGenerateMealPlan(year, month) {

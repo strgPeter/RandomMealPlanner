@@ -24,21 +24,21 @@ const MyCalendar = () => {
     const generateFoodPlan = async () => {
         setLoading(true);
         try {
-            const response = await fetch(null);
-            const data = await response.json();
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = today.getMonth() + 1; // JavaScript months are 0-based, API expects 1-12
+
+            const response = await fetch(`/api/foodPlan`);
+            const mealPlan = await response.json();
 
             const newEvents = {};
-            const today = new Date();
+            const currentMonth = today.getMonth(); // 0-based
 
-            data.meals.forEach(meal => {
-                const randomDate = new Date(today);
-                randomDate.setDate(today.getDate() + Math.floor(Math.random() * 30));
-                const dateString = randomDate.toISOString().split('T')[0];
-
-                if (!newEvents[dateString]) {
-                    newEvents[dateString] = [];
-                }
-                newEvents[dateString].push(meal.strMeal);
+            // Assign meals to their respective dates in the current month
+            Object.entries(mealPlan).forEach(([day, meals]) => {
+                const date = new Date(year, currentMonth, day);
+                const dateString = date.toISOString().split('T')[0];
+                newEvents[dateString] = meals;
             });
 
             setEvents(newEvents);
