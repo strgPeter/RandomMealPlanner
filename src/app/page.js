@@ -1,9 +1,9 @@
-import MyCalendar from '@/app/components/calendar/CalendarChart';
+import MyCalendar from './components/calendar/CalendarChart';
 
 export default function Home() {
-  return (
-      <div>
-        <MyCalendar />
-      </div>
-  );
+    return (
+        <div>
+            <MyCalendar />
+        </div>
+    );
 }

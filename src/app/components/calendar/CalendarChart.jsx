@@ -28,7 +28,7 @@ const MyCalendar = () => {
             const year = today.getFullYear();
             const month = today.getMonth() + 1; // JavaScript months are 0-based, API expects 1-12
 
-            const response = await fetch(`/api/foodPlan`);
+            const response = await fetch("api/foodPlan");
             const mealPlan = await response.json();
 
             const newEvents = {};
