@@ -18,19 +18,29 @@ export function generateMealPlan(year, month) {
 
     const daysInMonth = new Date(year, month, 0).getDate();
     let mealPlan = {};
-    let lastMeal = null;
+    let recentMeals = [];
 
     for (let day = 1; day <= daysInMonth; day++) {
-        let availableMeals = meals.filter(meal => meal !== lastMeal);
-        let dayMeals = [];
+        const lastThree = recentMeals.slice(-3);
+        let availableMeals = meals.filter(meal => !lastThree.includes(meal));
 
-        while (dayMeals.length < 2) {
-            let meal = availableMeals.splice(Math.floor(Math.random() * availableMeals.length), 1)[0];
-            dayMeals.push(meal);
+        if (availableMeals.length < 2) {
+            throw new Error(`Not enough meals available for day ${day}.`);
         }
 
+        let dayMeals = [];
+        // Select first meal
+        const firstMealIndex = Math.floor(Math.random() * availableMeals.length);
+        const firstMeal = availableMeals.splice(firstMealIndex, 1)[0];
+        dayMeals.push(firstMeal);
+
+        // Select second meal
+        const secondMealIndex = Math.floor(Math.random() * availableMeals.length);
+        const secondMeal = availableMeals.splice(secondMealIndex, 1)[0];
+        dayMeals.push(secondMeal);
+
         mealPlan[day] = dayMeals;
-        lastMeal = dayMeals[1]; // Ensures no consecutive days have the same last meal
+        recentMeals.push(...dayMeals);
     }
 
     return mealPlan;
