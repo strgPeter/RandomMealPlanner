@@ -7,6 +7,18 @@ async function logDatabaseStats() {
   
     console.log(`Meals: ${mealCount}, Ingredients: ${ingredientCount}, Meal-Ingredient Links: ${mealIngredientCount}`);
 }
+
+function deleteAllTables() {
+    try {
+        db.exec("DROP TABLE IF EXISTS MealIngredients;");
+        db.exec("DROP TABLE IF EXISTS Ingredients;");
+        db.exec("DROP TABLE IF EXISTS Meals;");
+        console.log("All tables deleted successfully.");
+    } catch (error) {
+        console.error("Error deleting tables:", error);
+    }
+}
   
+//deleteAllTables();
 logDatabaseStats();
   

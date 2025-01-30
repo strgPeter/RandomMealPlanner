@@ -67,4 +67,4 @@ async function insertData() {
     console.log("Database seeded successfully!");
   }
   
-  insertData();
+insertData();

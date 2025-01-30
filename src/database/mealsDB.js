@@ -5,10 +5,10 @@ const db = new Database("meals.db", { verbose: console.log });
 // Create Meals table
 db.exec(`
     CREATE TABLE IF NOT EXISTS Meals (
-    meal_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    meal_name TEXT UNIQUE NOT NULL,
-    description TEXT
-);
+        meal_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        meal_name TEXT UNIQUE NOT NULL,
+        description TEXT
+    );
 `);
 
 db.exec(`
@@ -20,10 +20,10 @@ db.exec(`
 
 db.exec(`
     CREATE TABLE IF NOT EXISTS MealIngredients (
-        meal_name TEXT,
+        meal_id INTEGER,
         ingredient_id INTEGER,
-        PRIMARY KEY (meal_name, ingredient_id),
-        FOREIGN KEY (meal_name) REFERENCES Meals(meal_name) ON DELETE CASCADE,
+        PRIMARY KEY (meal_id, ingredient_id),
+        FOREIGN KEY (meal_id) REFERENCES Meals(meal_id) ON DELETE CASCADE,
         FOREIGN KEY (ingredient_id) REFERENCES Ingredients(ingredient_id) ON DELETE CASCADE
     );
 `);
