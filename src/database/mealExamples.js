@@ -3,9 +3,8 @@
  * node .\src\database\mealExamples.js
  */
 
+import { insertMeal } from '../app/api/meals.js';
 
-// seedDB.js
-const { insertMeal } = require('../app/api/meals.js');
 
 // Example meals with ingredients
 const exampleMeals = [
@@ -60,17 +59,12 @@ const exampleMeals = [
   { name: "Ramen", ingredients: ["Ramen Noodles", "Egg", "Green Onion", "Pork Belly", "Soy Sauce"] }
 ];
 
-// Seed function
-async function seedDatabase() {
-  try {
+async function insertData() {
     for (const meal of exampleMeals) {
-      const result = insertMeal(meal.name, meal.ingredients);
-      console.log(`Added ${meal.name}: ${result.success ? 'Success' : 'Failed'}`);
+      const result = await insertMeal(meal.name, meal.ingredients);
+      console.log(result.message);
     }
-    console.log("Database seeding completed!");
-  } catch (error) {
-    console.error("Error seeding database:", error);
+    console.log("Database seeded successfully!");
   }
-}
-
-seedDatabase();
+  
+  insertData();

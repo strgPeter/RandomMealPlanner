@@ -1,4 +1,4 @@
-import db from "../../database/mealsDB";
+import db from "../../database/mealsDB.js";
 
 /**
  * Inserts a meal with its ingredients into the database.

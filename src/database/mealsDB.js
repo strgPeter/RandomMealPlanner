@@ -27,3 +27,5 @@ db.exec(`
         FOREIGN KEY (ingredient_id) REFERENCES Ingredients(ingredient_id) ON DELETE CASCADE
     );
 `);
+
+export default db;
