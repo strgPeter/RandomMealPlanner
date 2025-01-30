@@ -37,17 +37,6 @@ export function generateMealPlan(year, month) {
 /**
  * API handler to fetch meal plan based on month and year.
  * 
- * Example API call from the frontend:
- * 
- * ```javascript
- * async function fetchMealPlan(year, month) {
- *     const response = await fetch(`/api/meal-plan?year=${year}&month=${month}`);
- *     const data = await response.json();
- *     console.log(data);
- * }
- *
- * fetchMealPlan(2025, 2); // Fetch meal plan for February 2025
- * ```
  */
 export default function handler(req, res) {
     if (req.method === "GET") {
