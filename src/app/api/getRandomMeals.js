@@ -1,4 +1,4 @@
-import { getAllMeals } from "./meals";
+import { getAllMeals } from "./meals.js";
 
 /**
  * Generates a meal plan for a given month.
