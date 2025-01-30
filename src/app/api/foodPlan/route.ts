@@ -1,4 +1,5 @@
-import { getAllMeals } from "./meals";
+import { getAllMeals } from "../meals.js";
+import {NextResponse} from "next/server";
 
 /**
  * Generates a meal plan for a given month.
@@ -21,12 +22,12 @@ export function generateMealPlan(year, month) {
     for (let day = 1; day <= daysInMonth; day++) {
         let availableMeals = meals.filter(meal => meal !== lastMeal);
         let dayMeals = [];
-        
+
         while (dayMeals.length < 2) {
             let meal = availableMeals.splice(Math.floor(Math.random() * availableMeals.length), 1)[0];
             dayMeals.push(meal);
         }
-        
+
         mealPlan[day] = dayMeals;
         lastMeal = dayMeals[1]; // Ensures no consecutive days have the same last meal
     }
@@ -36,20 +37,9 @@ export function generateMealPlan(year, month) {
 
 /**
  * API handler to fetch meal plan based on month and year.
- * 
- * Example API call from the frontend:
- * 
- * ```javascript
- * async function fetchMealPlan(year, month) {
- *     const response = await fetch(`/api/meal-plan?year=${year}&month=${month}`);
- *     const data = await response.json();
- *     console.log(data);
- * }
  *
- * fetchMealPlan(2025, 2); // Fetch meal plan for February 2025
- * ```
  */
-export default function handler(req, res) {
+/*export default function handler(req, res) {
     if (req.method === "GET") {
         const { year, month } = req.query;
         if (!year || !month) {
@@ -65,4 +55,8 @@ export default function handler(req, res) {
     } else {
         res.status(405).json({ error: "Method Not Allowed" });
     }
+}*/
+
+export async function GET() {
+    return NextResponse.json(generateMealPlan(2025,1));
 }
