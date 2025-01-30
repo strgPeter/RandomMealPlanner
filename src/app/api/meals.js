@@ -1,4 +1,4 @@
-import db from "../mealsDB";
+import db from "../../database/mealsDB";
 
 /**
  * Inserts a meal with its ingredients into the database.
