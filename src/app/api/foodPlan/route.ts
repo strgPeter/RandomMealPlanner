@@ -1,4 +1,5 @@
 import { getAllMeals } from "../meals.js";
+import { insertMeal } from "../meals.js";
 import {NextResponse} from "next/server";
 
 /**
@@ -59,4 +60,15 @@ export function generateMealPlan(year, month) {
 
 export async function GET() {
     return NextResponse.json(generateMealPlan(2025,1));
+}
+
+export async function POST(req) {
+    const { mealName, ingredients } = req.body;
+    
+            if (!mealName || !Array.isArray(ingredients) || ingredients.length === 0) {
+                return NextResponse.json({ success: false, message: "Invalid input data" });
+            }
+    
+            const result = insertMeal(mealName, ingredients);
+            return NextResponse.json(result);
 }
