@@ -22,12 +22,12 @@ export function generateMealPlan(year, month) {
     for (let day = 1; day <= daysInMonth; day++) {
         let availableMeals = meals.filter(meal => meal !== lastMeal);
         let dayMeals = [];
-        
+
         while (dayMeals.length < 2) {
             let meal = availableMeals.splice(Math.floor(Math.random() * availableMeals.length), 1)[0];
             dayMeals.push(meal);
         }
-        
+
         mealPlan[day] = dayMeals;
         lastMeal = dayMeals[1]; // Ensures no consecutive days have the same last meal
     }
@@ -37,7 +37,7 @@ export function generateMealPlan(year, month) {
 
 /**
  * API handler to fetch meal plan based on month and year.
- * 
+ *
  */
 /*export default function handler(req, res) {
     if (req.method === "GET") {
