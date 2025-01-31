@@ -279,3 +279,16 @@
     color: #27ae60;  /* Green accent color */
 }
 
+/* Calendar.css */
+/* Remove hover effects ONLY on the month/year label */
+.react-calendar__navigation__label:hover {
+    background-color: transparent !important;
+    cursor: default !important;
+}
+
+/* Keep hover effects for arrow buttons */
+.react-calendar__navigation__prev-button:hover,
+.react-calendar__navigation__next-button:hover {
+    background-color: #f0f0f0 !important;
+    cursor: pointer !important;
+}

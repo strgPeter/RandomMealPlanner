@@ -32,27 +32,47 @@ const MyCalendar = () => {
         return currentWeek.toString();
     }, []);
 
-    // Scroll effect
     useEffect(() => {
         if (shoppingListRef.current) {
             shoppingListRef.current.scrollTop = 0;
         }
     }, [selectedWeek]);
 
-    // Initial load effect
     useEffect(() => {
         setIsClient(true);
-        loadSavedPlanner();
     }, []);
+
+    // Load planner whenever active month/year changes
+    useEffect(() => {
+        loadSavedPlanner();
+    }, [activeYear, activeMonth]);
 
     const loadSavedPlanner = useCallback(() => {
         const savedPlanner = localStorage.getItem('foodPlanner');
         if (savedPlanner) {
-            const { year, month, events: savedEvents = {}, shoppingLists: savedLists = {} } = JSON.parse(savedPlanner);
-            if (year === activeYear && month === activeMonth) {
-                setEvents(prev => JSON.stringify(prev) === JSON.stringify(savedEvents) ? prev : savedEvents);
-                setShoppingLists(prev => JSON.stringify(prev) === JSON.stringify(savedLists) ? prev : savedLists);
+            try {
+                const storedData = JSON.parse(savedPlanner);
+                const allPlans = Array.isArray(storedData) ? storedData : [storedData];
+
+                const currentPlan = allPlans.find(plan =>
+                    plan.year === activeYear && plan.month === activeMonth
+                );
+
+                if (currentPlan) {
+                    setEvents(currentPlan.events || {});
+                    setShoppingLists(currentPlan.shoppingLists || {});
+                } else {
+                    setEvents({});
+                    setShoppingLists({});
+                }
+            } catch (error) {
+                console.error('Error parsing saved planner:', error);
+                setEvents({});
+                setShoppingLists({});
             }
+        } else {
+            setEvents({});
+            setShoppingLists({});
         }
     }, [activeYear, activeMonth]);
 
@@ -60,15 +80,37 @@ const MyCalendar = () => {
         const newYear = activeStartDate.getFullYear();
         const newMonth = activeStartDate.getMonth() + 1;
 
+        // Only update if month/year actually changed
         if (newYear !== activeYear || newMonth !== activeMonth) {
             setActiveYear(newYear);
             setActiveMonth(newMonth);
-            // Queue the planner load after state update
-            setTimeout(loadSavedPlanner, 0);
         }
-    }, [activeYear, activeMonth, loadSavedPlanner]);
+    }, [activeYear, activeMonth]);
 
     const generateFoodPlan = useCallback(async () => {
+        let allPlans = [];
+        try {
+            const savedPlanner = localStorage.getItem('foodPlanner');
+            if (savedPlanner) {
+                const parsed = JSON.parse(savedPlanner);
+                allPlans = Array.isArray(parsed) ? parsed : [parsed];
+            }
+        } catch (error) {
+            console.error('Error parsing existing plans:', error);
+            allPlans = [];
+        }
+
+        const existingPlanIndex = allPlans.findIndex(plan =>
+            plan.year === activeYear && plan.month === activeMonth
+        );
+
+        if (existingPlanIndex !== -1) {
+            const confirmOverwrite = window.confirm(
+                'A meal plan already exists for this month. Overwrite it?'
+            );
+            if (!confirmOverwrite) return;
+        }
+
         setLoading(true);
         try {
             const response = await fetch(`/api/foodPlan?year=${activeYear}&month=${activeMonth}`);
@@ -81,14 +123,22 @@ const MyCalendar = () => {
                 newEvents[dateString] = meals;
             });
 
-            setEvents(newEvents);
-            setShoppingLists(shoppingLists);
-            localStorage.setItem('foodPlanner', JSON.stringify({
+            const newPlan = {
                 year: activeYear,
                 month: activeMonth,
                 events: newEvents,
                 shoppingLists
-            }));
+            };
+
+            if (existingPlanIndex !== -1) {
+                allPlans[existingPlanIndex] = newPlan;
+            } else {
+                allPlans.push(newPlan);
+            }
+
+            localStorage.setItem('foodPlanner', JSON.stringify(allPlans));
+            setEvents(newEvents);
+            setShoppingLists(shoppingLists);
         } catch (error) {
             console.error('Error generating food plan:', error);
         }
@@ -126,6 +176,8 @@ const MyCalendar = () => {
                     tileContent={tileContent}
                     className="react-calendar"
                     activeStartDate={new Date(activeYear, activeMonth - 1)}
+                    view="month"
+                    onClickMonth={() => {}}
                 />
 
                 <div className="right-panel">
