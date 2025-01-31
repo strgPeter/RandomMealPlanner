@@ -1,57 +1,104 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import './Calendar.css';
 
 const MyCalendar = () => {
-    const [date, setDate] = useState(null);
+    const [selectedDate, setSelectedDate] = useState(null);
+    const [activeYear, setActiveYear] = useState(new Date().getFullYear());
+    const [activeMonth, setActiveMonth] = useState(new Date().getMonth() + 1);
     const [events, setEvents] = useState({});
+    const [shoppingLists, setShoppingLists] = useState({});
     const [isClient, setIsClient] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [selectedDay, setSelectedDay] = useState(null);
+    const [selectedWeek, setSelectedWeek] = useState(null);
+    const shoppingListRef = useRef(null);
 
-    useEffect(() => {
-        setIsClient(true);
-        setDate(new Date());
-        const savedEvents = localStorage.getItem('foodPlanner');
-        if (savedEvents) {
-            setEvents(JSON.parse(savedEvents));
+    const getWeekNumberForDate = useCallback((date) => {
+        const year = date.getFullYear();
+        const month = date.getMonth();
+        const day = date.getDate();
+        const firstDayOfMonth = new Date(year, month, 1).getDay();
+        let currentWeek = 0;
+
+        for (let d = 1; d <= day; d++) {
+            const weekday = (firstDayOfMonth + d - 1) % 7;
+            if (d === 1 || weekday === 1) {
+                currentWeek++;
+            }
         }
+        return currentWeek.toString();
     }, []);
 
-    const generateFoodPlan = async () => {
+    // Scroll effect
+    useEffect(() => {
+        if (shoppingListRef.current) {
+            shoppingListRef.current.scrollTop = 0;
+        }
+    }, [selectedWeek]);
+
+    // Initial load effect
+    useEffect(() => {
+        setIsClient(true);
+        loadSavedPlanner();
+    }, []);
+
+    const loadSavedPlanner = useCallback(() => {
+        const savedPlanner = localStorage.getItem('foodPlanner');
+        if (savedPlanner) {
+            const { year, month, events: savedEvents = {}, shoppingLists: savedLists = {} } = JSON.parse(savedPlanner);
+            if (year === activeYear && month === activeMonth) {
+                setEvents(prev => JSON.stringify(prev) === JSON.stringify(savedEvents) ? prev : savedEvents);
+                setShoppingLists(prev => JSON.stringify(prev) === JSON.stringify(savedLists) ? prev : savedLists);
+            }
+        }
+    }, [activeYear, activeMonth]);
+
+    const handleActiveStartDateChange = useCallback(({ activeStartDate }) => {
+        const newYear = activeStartDate.getFullYear();
+        const newMonth = activeStartDate.getMonth() + 1;
+
+        if (newYear !== activeYear || newMonth !== activeMonth) {
+            setActiveYear(newYear);
+            setActiveMonth(newMonth);
+            // Queue the planner load after state update
+            setTimeout(loadSavedPlanner, 0);
+        }
+    }, [activeYear, activeMonth, loadSavedPlanner]);
+
+    const generateFoodPlan = useCallback(async () => {
         setLoading(true);
         try {
-            const today = new Date();
-            const year = today.getFullYear();
-            const month = today.getMonth() + 1; // JavaScript months are 0-based, API expects 1-12
-
-            const response = await fetch("api/foodPlan");
-            const mealPlan = await response.json();
+            const response = await fetch(`/api/foodPlan?year=${activeYear}&month=${activeMonth}`);
+            const { mealPlan, shoppingLists } = await response.json();
 
             const newEvents = {};
-            const currentMonth = today.getMonth(); // 0-based
-
-            // Assign meals to their respective dates in the current month
             Object.entries(mealPlan).forEach(([day, meals]) => {
-                const date = new Date(year, currentMonth, day);
+                const date = new Date(activeYear, activeMonth - 1, day);
                 const dateString = date.toISOString().split('T')[0];
                 newEvents[dateString] = meals;
             });
 
             setEvents(newEvents);
-            localStorage.setItem('foodPlanner', JSON.stringify(newEvents));
+            setShoppingLists(shoppingLists);
+            localStorage.setItem('foodPlanner', JSON.stringify({
+                year: activeYear,
+                month: activeMonth,
+                events: newEvents,
+                shoppingLists
+            }));
         } catch (error) {
             console.error('Error generating food plan:', error);
         }
         setLoading(false);
-    };
+    }, [activeYear, activeMonth]);
 
-    const handleDayClick = (value) => {
-        setSelectedDay(value);
-    };
+    const handleDateChange = useCallback((date) => {
+        setSelectedDate(date);
+        setSelectedWeek(getWeekNumberForDate(date));
+    }, [getWeekNumberForDate]);
 
     if (!isClient) return null;
 
@@ -73,11 +120,12 @@ const MyCalendar = () => {
             <h1>Food Planner</h1>
             <div className="layout-wrapper">
                 <Calendar
-                    onChange={setDate}
-                    onClickDay={handleDayClick}
-                    value={date}
+                    onChange={handleDateChange}
+                    onActiveStartDateChange={handleActiveStartDateChange}
+                    value={selectedDate}
                     tileContent={tileContent}
                     className="react-calendar"
+                    activeStartDate={new Date(activeYear, activeMonth - 1)}
                 />
 
                 <div className="right-panel">
@@ -86,15 +134,48 @@ const MyCalendar = () => {
                         disabled={loading}
                         className="generate-button"
                     >
-                        {loading ? 'Generating...' : 'Generate Food Planner'}
+                        {loading ? 'Generating...' : `Generate ${new Date(activeYear, activeMonth - 1).toLocaleString('default', { month: 'long' })} Plan`}
                     </button>
 
-                    {selectedDay && (
+                    <div className="shopping-list" ref={shoppingListRef}>
+                        <h3>Weekly Shopping List</h3>
+                        {selectedWeek ? (
+                            shoppingLists[selectedWeek] ? (
+                                <div className="week">
+                                    <h4>Week {selectedWeek}</h4>
+                                    <ul>
+                                        {shoppingLists[selectedWeek].map((ingredient, index) => (
+                                            <li key={index}>{ingredient}</li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            ) : (
+                                <p>No shopping list for week {selectedWeek}</p>
+                            )
+                        ) : (
+                            Object.entries(shoppingLists).length > 0 ? (
+                                Object.entries(shoppingLists).map(([weekNumber, ingredients]) => (
+                                    <div key={weekNumber} className="week">
+                                        <h4>Week {weekNumber}</h4>
+                                        <ul>
+                                            {ingredients.map((ingredient, index) => (
+                                                <li key={index}>{ingredient}</li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                ))
+                            ) : (
+                                <p>No shopping lists generated yet</p>
+                            )
+                        )}
+                    </div>
+
+                    {selectedDate && (
                         <div className="day-events">
-                            <h3>Meals for {selectedDay.toDateString()}</h3>
-                            {events[selectedDay.toISOString().split('T')[0]] ? (
+                            <h3>Meals for {selectedDate.toDateString()}</h3>
+                            {events[selectedDate.toISOString().split('T')[0]] ? (
                                 <ul>
-                                    {events[selectedDay.toISOString().split('T')[0]].map((event, index) => (
+                                    {events[selectedDate.toISOString().split('T')[0]].map((event, index) => (
                                         <li key={index}>{event}</li>
                                     ))}
                                 </ul>

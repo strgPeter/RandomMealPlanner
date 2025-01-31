@@ -164,3 +164,118 @@
 .react-calendar__navigation__label__labelText--from {
     font-size: 1.5em;
 }
+
+/* Shopping List Styles */
+.shopping-list {
+    background: white;
+    padding: 15px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.shopping-list h3 {
+    margin: 0 0 15px 0;
+    color: #333;
+    font-size: 16px;
+}
+
+.week {
+    margin-bottom: 15px;
+}
+
+.week h4 {
+    margin: 0 0 10px 0;
+    color: #2980b9;
+    font-size: 14px;
+}
+
+.week ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.week li {
+    padding: 5px 0;
+    font-size: 0.85em;
+    border-bottom: 1px solid #eee;
+}
+
+.week li:last-child {
+    border-bottom: none;
+}
+
+/* Adjust right panel layout */
+.right-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Selected date styling */
+.react-calendar__tile--active {
+    background-color: #e6f7ff !important;
+    color: #1890ff !important;
+}
+
+.react-calendar__tile--active abbr {
+    color: #1890ff !important;
+}
+
+/* Hover effect */
+.react-calendar__tile:enabled:hover {
+    background-color: #f0f0f0;
+}
+
+.shopping-list {
+    background: white;
+    padding: 15px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    max-height: 300px;
+    overflow-y: auto;
+    /* Add smooth scrolling */
+    scroll-behavior: smooth;
+}
+
+/* Events in calendar cells */
+.event-item {
+    color: #2d3436;  /* Dark gray color */
+    background-color: #ffecb3;
+    margin: 2px 0;
+    padding: 2px;
+    font-size: 0.8em;
+}
+
+/* Shopping list items */
+.week li {
+    color: #2980b9;  /* Matching blue theme color */
+    padding: 5px 0;
+    font-size: 0.85em;
+    border-bottom: 1px solid #eee;
+}
+
+/* Day events panel items */
+.day-events li {
+    color: #34495e;  /* Dark blue-gray color */
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+}
+
+/* Optional: Adjust header colors */
+.day-events h3 {
+    color: #2c3e50;  /* Dark slate color */
+}
+
+.shopping-list h3 {
+    color: #2c3e50;
+}
+
+.week h4 {
+    color: #27ae60;  /* Green accent color */
+}
+

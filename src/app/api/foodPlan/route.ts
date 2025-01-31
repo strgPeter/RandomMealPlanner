@@ -77,8 +77,12 @@ export function generateMealPlan(year, month) {
 }
 
 
-export async function GET() {
-    return NextResponse.json(generateMealPlan(2025,1));
+export async function GET(request) {
+    const { searchParams } = new URL(request.url);
+    const year = parseInt(searchParams.get('year')) || new Date().getFullYear();
+    const month = parseInt(searchParams.get('month')) || new Date().getMonth() + 1;
+
+    return NextResponse.json(generateMealPlan(year, month));
 }
 /**
  * API handler to fetch meal plan based on month and year.
