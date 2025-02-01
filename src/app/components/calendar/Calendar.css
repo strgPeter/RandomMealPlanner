@@ -299,3 +299,116 @@
     color: #18ab24 !important;             /* Green text color */
     font-weight: bold;
 }
+
+/* Accordion Styles */
+.accordion {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.accordion-item {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.accordion-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px;
+    background-color: #f8f9fa;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.accordion-header:hover {
+    background-color: #e9ecef;
+}
+
+.accordion-header h3 {
+    margin: 0;
+    font-size: 16px;
+    color: #2c3e50;
+}
+
+.accordion-header span {
+    font-size: 18px;
+    font-weight: bold;
+    color: #6c757d;
+}
+
+.accordion-content {
+    padding: 15px;
+    background-color: white;
+    border-top: 1px solid #eee;
+}
+
+.meal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.meal-form input {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.save-button {
+    background: #2196F3;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.save-button:hover {
+    background: #1976D2;
+}
+
+.all-meals-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.all-meals-list li {
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.all-meals-list li:last-child {
+    border-bottom: none;
+}
+
+/* Calendar.css */
+.right-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.generate-button {
+    order: -1; /* Move to top */
+    margin-bottom: 0;
+}
+
+.accordion {
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+.meal-form input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}

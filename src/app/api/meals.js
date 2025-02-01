@@ -84,23 +84,3 @@ export function getAllMeals() {
         return { error: error.message };
     }
 }
-
-/**
- * Handles API requests for managing meals.
- */
-export default function handler(req, res) {
-    if (req.method === "POST") {
-        const { mealName, ingredients } = req.body;
-
-        if (!mealName || !Array.isArray(ingredients) || ingredients.length === 0) {
-            return res.status(400).json({ success: false, message: "Invalid input data" });
-        }
-
-        const result = insertMeal(mealName, ingredients);
-        res.status(200).json(result);
-    } else if (req.method === "GET") {
-        res.status(200).json(getAllMeals());
-    } else {
-        res.status(405).json({ error: "Method Not Allowed" });
-    }
-}
