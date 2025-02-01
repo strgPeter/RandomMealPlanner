@@ -13,7 +13,7 @@ Meal Planner is a meal planning calendar application that randomly assigns meals
 1. Clone the repository:
    ```sh
    git clone https://github.com/strgPeter/RandomMealPlanner.git
-   cd react-food-calendar
+   cd random_meal_planner
    ```
 2. Install dependencies:
    ```sh
