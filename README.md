@@ -28,9 +28,9 @@ Meal Planner is a meal planning calendar application that randomly assigns meals
 
 ## Usage
 1. Open the app in your browser.
-2. Click on 'Generate [Month] Plan.
+2. Click on 'Generate [Month] Plan'.
 3. View the generated meal plan for the month.
-4. Check the shopping list for each week.
+4. Check the shopping list all weeks.
 5. Clicking on a day limits the shopping list to the corresponding week.
 
 
