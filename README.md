@@ -8,12 +8,11 @@ Meal Planner is a meal planning calendar application that randomly assigns meals
 
 ### Prerequisites
 - Node.js and npm installed
-- SQLite database set up with meals and ingredients
 
 ### Steps to Run the Project
 1. Clone the repository:
    ```sh
-   git clone https://github.com/your-username/react-food-calendar.git
+   git clone https://github.com/strgPeter/RandomMealPlanner.git
    cd react-food-calendar
    ```
 2. Install dependencies:
