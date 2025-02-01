@@ -16,7 +16,6 @@ const MyCalendar = () => {
     const [selectedWeek, setSelectedWeek] = useState(null);
     const shoppingListRef = useRef(null);
     const [activeRegister, setActiveRegister] = useState(null);
-    const [newMeal, setNewMeal] = useState({ name: '', ingredients: '' });
     const [allMeals, setAllMeals] = useState([]);
 
     // Add this new function to fetch all meals
@@ -31,29 +30,35 @@ const MyCalendar = () => {
     }, []);
 
     // Add this new function to handle meal creation
+    const mealNameRef = useRef('');
+    const ingredientsRef = useRef('');
+
     const handleCreateMeal = async () => {
-        if (!newMeal.name || !newMeal.ingredients) return;
+        const mealName = mealNameRef.current.value.trim();
+        const ingredients = ingredientsRef.current.value.trim();
+
+        if (!mealName || !ingredients) return;
 
         try {
             const response = await fetch('/api/foodPlan', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    mealName: newMeal.name,
-                    ingredients: newMeal.ingredients.split(',').map(i => i.trim())
+                    mealName,
+                    ingredients: ingredients.split(',').map(i => i.trim())
                 })
             });
 
             if (response.ok) {
-                setNewMeal({ name: '', ingredients: '' });
+                mealNameRef.current.value = '';
+                ingredientsRef.current.value = '';
                 fetchAllMeals();
             }
         } catch (error) {
             console.error('Error creating meal:', error);
         }
     };
+
 
     const getWeekNumberForDate = useCallback((date) => {
         const year = date.getFullYear();
@@ -283,21 +288,10 @@ const MyCalendar = () => {
                     {activeRegister === 3 && (
                         <div className="accordion-content">
                             <div className="meal-form">
-                                <input
-                                    type="text"
-                                    placeholder="Meal Name"
-                                    value={newMeal.name}
-                                    onChange={(e) => setNewMeal({...newMeal, name: e.target.value})}
-                                />
-                                <input
-                                    type="text"
-                                    placeholder="Ingredients (comma separated)"
-                                    value={newMeal.ingredients}
-                                    onChange={(e) => setNewMeal({...newMeal, ingredients: e.target.value})}
-                                />
-                                <button onClick={handleCreateMeal} className="save-button">
-                                    Save Meal
-                                </button>
+                                <input type="text" placeholder="Meal Name" ref={mealNameRef} />
+                                <input type="text" placeholder="Ingredients (comma separated)" ref={ingredientsRef} />
+                                <button onClick={handleCreateMeal} className="save-button">Save Meal</button>
+
                             </div>
                         </div>
                     )}
