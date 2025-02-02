@@ -84,37 +84,20 @@ export async function GET(request) {
 
     return NextResponse.json(generateMealPlan(year, month));
 }
-/**
- * API handler to fetch meal plan based on month and year.
- *
- */
-/*export default function handler(req, res) {
-    if (req.method === "GET") {
-        const { year, month } = req.query;
-        if (!year || !month) {
-            return res.status(400).json({ error: "Year and month parameters are required." });
-        }
-
-        try {
-            const mealPlan = generateMealPlan(parseInt(year), parseInt(month));
-            res.status(200).json(mealPlan);
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
-    } else {
-        res.status(405).json({ error: "Method Not Allowed" });
-    }
-}*/
-
-
 
 export async function POST(req) {
-    const { mealName, ingredients } = req.body;
-    
-    if (!mealName || !Array.isArray(ingredients) || ingredients.length === 0) {
-        return NextResponse.json({ success: false, message: "Invalid input data" });
+    try {
+        const body = await req.json();  // Extract JSON body correctly
+        const { mealName, ingredients } = body;
+
+        if (!mealName || !Array.isArray(ingredients) || ingredients.length === 0) {
+            return NextResponse.json({ success: false, message: "Invalid input data" });
+        }
+
+        const result = insertMeal(mealName, ingredients);
+        return NextResponse.json(result);
+    } catch (error) {
+        console.error("Error in POST request:", error);
+        return NextResponse.json({ success: false, message: "Server error" });
     }
-    
-    const result = insertMeal(mealName, ingredients);
-    return NextResponse.json(result);
 }

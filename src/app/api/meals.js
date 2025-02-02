@@ -84,6 +84,7 @@ export function getAllMeals() {
         return { error: error.message };
     }
 }
+<<<<<<< HEAD
 
 /**
  * Deletes a meal by name from the database.
@@ -147,3 +148,5 @@ export function deleteMeal(mealName) {
     }
   }
   
+=======
+>>>>>>> cb783fdc40ed97ad9acfa2a8236e8e4c20171e4e
