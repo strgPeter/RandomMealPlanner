@@ -38,7 +38,7 @@ Meal Planner is a meal planning calendar application that randomly assigns meals
 - In the accordion menu on the left-hand side, the weekly shopping list(s) can be found by clicking the 'View Detail of Food Plan' button.
    - When selecting a specific day on the calendar, the shopping list is limited to that week.
 - Meals can be added to the system with the 'Create New Meal' button. The ingredients must be listed, separated by commas.
-- To meet certain constraints when distributing meals over the week, at least five meals must be defined.
+- To meet certain constraints when distributing meals over the month, at least five meals must be defined.
 - This repository comes with a number of predefined meals for demonstration purposes; meals can be deleted by clicking on the red minus symbol next to the meal after clicking 'Show All Meals'.
 - Additionally, the plan can be deleted by clicking the 'Delete <Month> Plan' button. This does not delete the specified meals from the system.
 
