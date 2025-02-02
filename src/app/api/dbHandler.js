@@ -121,29 +121,3 @@ export function deleteMeal(mealName) {
       return { success: false, message: error.message };
     }
   }
-
-  /**
-   * Handles API requests for managing meals.
-   */
-  export default function handler(req, res) {
-    if (req.method === "POST") {
-      const { mealName, ingredients } = req.body;
-      if (!mealName || !Array.isArray(ingredients) || ingredients.length === 0) {
-        return res.status(400).json({ success: false, message: "Invalid input data" });
-      }
-      const result = insertMeal(mealName, ingredients);
-      res.status(200).json(result);
-    } else if (req.method === "GET") {
-      res.status(200).json(getAllMeals());
-    } else if (req.method === "DELETE") {
-      const { mealName } = req.body;
-      if (!mealName) {
-        return res.status(400).json({ success: false, message: "Meal name is required for deletion" });
-      }
-      const result = deleteMeal(mealName);
-      res.status(200).json(result);
-    } else {
-      res.status(405).json({ error: "Method Not Allowed" });
-    }
-  }
-  

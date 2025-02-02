@@ -1,4 +1,4 @@
-import MyCalendar from './components/calendar/CalendarChart';
+import MyCalendar from './components/calendar/chart';
 
 export default function Home() {
     return (

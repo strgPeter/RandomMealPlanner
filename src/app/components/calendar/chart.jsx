@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import './Calendar.css';
+import './chart.css';
 
 const MyCalendar = () => {
     const [selectedDate, setSelectedDate] = useState(null);
@@ -56,6 +56,26 @@ const MyCalendar = () => {
             }
         } catch (error) {
             console.error('Error creating meal:', error);
+        }
+    };
+
+    const handleDeleteMeal = async (mealName) => {
+        if (!window.confirm(`Delete meal "${mealName}" permanently?`)) return;
+
+        try {
+            const response = await fetch(`/api/allMeals?mealName=${encodeURIComponent(mealName)}`, {
+                method: 'DELETE'
+            });
+            const data = await response.json();
+
+            if (data.success) {
+                fetchAllMeals();
+            } else {
+                alert(`Error: ${data.message}`);
+            }
+        } catch (error) {
+            console.error('Delete failed:', error);
+            alert('Failed to delete meal');
         }
     };
 
@@ -312,7 +332,16 @@ const MyCalendar = () => {
                                 {allMeals.length > 0 ? (
                                     <ul>
                                         {allMeals.map((meal, index) => (
-                                            <li key={index}>{meal}</li>
+                                            <li key={index}>
+                                                {meal}
+                                                <button
+                                                    onClick={() => handleDeleteMeal(meal)}
+                                                    className="delete-button"
+                                                    title="Delete meal"
+                                                >
+                                                    −
+                                                </button>
+                                            </li>
                                         ))}
                                     </ul>
                                 ) : (

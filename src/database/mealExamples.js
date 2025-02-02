@@ -3,7 +3,7 @@
  * node .\src\database\mealExamples.js
  */
 
-import { insertMeal } from '../app/api/meals.js';
+import { insertMeal } from '@/app/api/dbHandler';
 
 
 // Example meals with ingredients
