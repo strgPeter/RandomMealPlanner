@@ -18,7 +18,5 @@ async function logDatabaseStats() {
         console.error("Error deleting tables:", error);
     }
 }*/
-  
-//deleteAllTables();
 logDatabaseStats();
   

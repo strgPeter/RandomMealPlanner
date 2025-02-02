@@ -7,7 +7,6 @@ const _dirname = path.dirname(_filename);
 
 const db = new Database(path.join(_dirname, 'meals.db'), { verbose: console.log });
 
-// Create Meals table
 db.exec(`
     CREATE TABLE IF NOT EXISTS Meals (
         meal_id INTEGER PRIMARY KEY AUTOINCREMENT,

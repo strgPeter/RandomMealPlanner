@@ -167,7 +167,6 @@ const Chart = () => {
 
             localStorage.setItem('foodPlanner', JSON.stringify(updatedPlans));
 
-            // Clear the displayed plan
             setEvents({});
             setShoppingLists({});
         } catch (error) {

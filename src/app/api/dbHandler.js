@@ -75,8 +75,7 @@ export function getAllMeals() {
         `);
 
         for (const { meal_id, meal_name } of meals) {
-            const ingredients = getIngredientsStmt.all(meal_id).map(row => row.ingredient_name);
-            result[meal_name] = ingredients;
+            result[meal_name] = getIngredientsStmt.all(meal_id).map(row => row.ingredient_name);
         }
 
         return result;
@@ -99,17 +98,14 @@ export function getAllMeals() {
 export function deleteMeal(mealName) {
     try {
       const deleteTransaction = db.transaction(() => {
-        // Retrieve the meal_id for the given meal name
         const meal = db.prepare("SELECT meal_id FROM Meals WHERE meal_name = ?").get(mealName);
         if (!meal) {
           throw new Error(`Meal '${mealName}' not found`);
         }
         const meal_id = meal.meal_id;
-  
-        // Delete the meal.
+
         db.prepare("DELETE FROM Meals WHERE meal_id = ?").run(meal_id);
-  
-        // Delete ingredients that are no longer referenced in the MealIngredients table.
+
         db.prepare(
           "DELETE FROM Ingredients WHERE ingredient_id NOT IN (SELECT DISTINCT ingredient_id FROM MealIngredients)"
         ).run();

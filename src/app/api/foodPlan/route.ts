@@ -13,7 +13,7 @@ export async function GET(request) {
 
 export async function POST(req) {
     try {
-        const body = await req.json();  // Extract JSON body correctly
+        const body = await req.json();
         const { mealName, ingredients } = body;
 
         if (!mealName || !Array.isArray(ingredients) || ingredients.length === 0) {
