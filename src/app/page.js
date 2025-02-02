@@ -1,9 +1,9 @@
-import MyCalendar from './components/calendar/chart';
+import Chart from './components/calendar/Chart';
 
 export default function Home() {
     return (
         <div>
-            <MyCalendar />
+            <Chart />
         </div>
     );
 }

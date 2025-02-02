@@ -1,0 +1,31 @@
+/* Meal form styles */
+.meal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.meal-form input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+.save-button {
+    background: #2196F3;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 16px;
+}
+
+.save-button:hover {
+    background: #1976D2;
+}

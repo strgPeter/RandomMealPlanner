@@ -3,7 +3,7 @@
  * node .\src\database\mealExamples.js
  */
 
-import { insertMeal } from '@/app/api/dbHandler';
+import { insertMeal } from '../app/api/dbHandler.js';
 
 
 // Example meals with ingredients
@@ -65,6 +65,6 @@ async function insertData() {
       console.log(result.message);
     }
     console.log("Database seeded successfully!");
-  }
-  
+}
+
 insertData();

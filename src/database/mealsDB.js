@@ -1,6 +1,11 @@
 import Database from "better-sqlite3";
+import path from 'path';
+import {fileURLToPath} from 'url';
 
-const db = new Database("meals.db", { verbose: console.log });
+const _filename = fileURLToPath(import.meta.url);
+const _dirname = path.dirname(_filename);
+
+const db = new Database(path.join(_dirname, 'meals.db'), { verbose: console.log });
 
 // Create Meals table
 db.exec(`

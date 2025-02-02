@@ -1,0 +1,44 @@
+/* Shopping list styles */
+.shopping-list {
+    background: white;
+    padding: 15px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    max-height: 300px;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+}
+
+.shopping-list h3 {
+    margin: 0 0 15px 0;
+    color: #2c3e50;
+    font-size: 16px;
+}
+
+.week {
+    margin-bottom: 15px;
+}
+
+.week h4 {
+    margin: 0 0 10px 0;
+    color: #27ae60;
+    font-size: 14px;
+}
+
+.week ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.week li {
+    color: #2980b9;
+    padding: 5px 0;
+    font-size: 0.85em;
+    border-bottom: 1px solid #eee;
+}
+
+.week li:last-child {
+    border-bottom: none;
+}

@@ -40,3 +40,31 @@ a {
     color-scheme: dark;
   }
 }
+
+/* Global layout styles */
+.calendar-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.layout-wrapper {
+  display: flex;
+  gap: 30px;
+  margin-top: 20px;
+}
+
+.event-badge {
+  width: 100%;
+  margin-top: auto;
+  flex: 1;
+  overflow: auto;
+}
+
+.event-item {
+  color: #2d3436;
+  background-color: #ffecb3;
+  margin: 2px 0;
+  padding: 2px;
+  font-size: 0.8em;
+}

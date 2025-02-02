@@ -1,0 +1,40 @@
+/* All meals list styles */
+.all-meals-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.all-meals-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.all-meals-list li:last-child {
+    border-bottom: none;
+}
+
+.delete-button {
+    background: #ff4444;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    margin-left: 8px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    line-height: 1;
+}
+
+.delete-button:hover {
+    background: #cc0000;
+    transform: scale(1.1);
+}
