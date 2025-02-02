@@ -86,21 +86,64 @@ export function getAllMeals() {
 }
 
 /**
- * Handles API requests for managing meals.
+ * Deletes a meal by name from the database.
+ * 
+ * This function:
+ * - Retrieves the meal's ID from the Meals table.
+ * - Deletes the meal (which cascades to remove the associated MealIngredients).
+ * - Optionally cleans up orphan ingredients (i.e. ingredients not referenced by any meal).
+ *
+ * @param {string} mealName - The name of the meal to delete.
+ * @returns {Object} - An object with a success status and a message.
  */
-export default function handler(req, res) {
-    if (req.method === "POST") {
-        const { mealName, ingredients } = req.body;
-
-        if (!mealName || !Array.isArray(ingredients) || ingredients.length === 0) {
-            return res.status(400).json({ success: false, message: "Invalid input data" });
+export function deleteMeal(mealName) {
+    try {
+      const deleteTransaction = db.transaction(() => {
+        // Retrieve the meal_id for the given meal name
+        const meal = db.prepare("SELECT meal_id FROM Meals WHERE meal_name = ?").get(mealName);
+        if (!meal) {
+          throw new Error(`Meal '${mealName}' not found`);
         }
-
-        const result = insertMeal(mealName, ingredients);
-        res.status(200).json(result);
-    } else if (req.method === "GET") {
-        res.status(200).json(getAllMeals());
-    } else {
-        res.status(405).json({ error: "Method Not Allowed" });
+        const meal_id = meal.meal_id;
+  
+        // Delete the meal.
+        db.prepare("DELETE FROM Meals WHERE meal_id = ?").run(meal_id);
+  
+        // Delete ingredients that are no longer referenced in the MealIngredients table.
+        db.prepare(
+          "DELETE FROM Ingredients WHERE ingredient_id NOT IN (SELECT DISTINCT ingredient_id FROM MealIngredients)"
+        ).run();
+      });
+  
+      deleteTransaction();
+      return { success: true, message: `Meal '${mealName}' deleted successfully` };
+    } catch (error) {
+      return { success: false, message: error.message };
     }
-}
+  }
+
+  /**
+   * Handles API requests for managing meals.
+   */
+  export default function handler(req, res) {
+    if (req.method === "POST") {
+      const { mealName, ingredients } = req.body;
+      if (!mealName || !Array.isArray(ingredients) || ingredients.length === 0) {
+        return res.status(400).json({ success: false, message: "Invalid input data" });
+      }
+      const result = insertMeal(mealName, ingredients);
+      res.status(200).json(result);
+    } else if (req.method === "GET") {
+      res.status(200).json(getAllMeals());
+    } else if (req.method === "DELETE") {
+      const { mealName } = req.body;
+      if (!mealName) {
+        return res.status(400).json({ success: false, message: "Meal name is required for deletion" });
+      }
+      const result = deleteMeal(mealName);
+      res.status(200).json(result);
+    } else {
+      res.status(405).json({ error: "Method Not Allowed" });
+    }
+  }
+  
