@@ -153,6 +153,28 @@ const Chart = () => {
         setLoading(false);
     }, [activeYear, activeMonth]);
 
+    const deleteFoodPlan = useCallback(() => {
+        if (!window.confirm(`Are you sure you want to delete the plan for ${new Date(activeYear, activeMonth - 1).toLocaleString('default', {month: 'long'})}?`)) {
+            return;
+        }
+
+        try {
+            const savedPlanner = localStorage.getItem('foodPlanner');
+            if (!savedPlanner) return;
+
+            const allPlans = JSON.parse(savedPlanner);
+            const updatedPlans = allPlans.filter(plan => !(plan.year === activeYear && plan.month === activeMonth));
+
+            localStorage.setItem('foodPlanner', JSON.stringify(updatedPlans));
+
+            // Clear the displayed plan
+            setEvents({});
+            setShoppingLists({});
+        } catch (error) {
+            console.error('Error deleting month plan:')
+        }
+    }, [activeYear, activeMonth]);
+
     const handleDateChange = useCallback((date) => {
         setSelectedDate(date);
         setSelectedWeek(getWeekNumberForDate(date));
@@ -188,6 +210,20 @@ const Chart = () => {
         if (shoppingListRef.current) shoppingListRef.current.scrollTop = 0;
     }, [selectedWeek]);
 
+    useEffect(() => {
+        const handleMonthClick = (event) => {
+            const navigation = document.querySelector('.react-calendar__navigation__label');
+            if (navigation && navigation.contains(event.target)) {
+                setActiveYear(new Date().getFullYear());
+                setActiveMonth(new Date().getMonth() + 1);
+                setSelectedDate(new Date());
+            }
+        };
+        document.addEventListener('click', handleMonthClick);
+        return () => document.removeEventListener('click', handleMonthClick);
+    }, []);
+
+
     if (!isClient) return null;
 
     return (
@@ -209,6 +245,7 @@ const Chart = () => {
                     activeRegister={activeRegister}
                     setActiveRegister={setActiveRegister}
                     generateFoodPlan={generateFoodPlan}
+                    deleteFoodPlan={deleteFoodPlan}
                     loading={loading}
                     shoppingLists={shoppingLists}
                     selectedWeek={selectedWeek}

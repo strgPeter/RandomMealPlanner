@@ -13,6 +13,7 @@ export const RightPanel = ({
                                activeRegister,
                                setActiveRegister,
                                generateFoodPlan,
+                               deleteFoodPlan,
                                loading,
                                shoppingLists,
                                selectedWeek,
@@ -70,5 +71,12 @@ export const RightPanel = ({
                 />
             </AccordionItem>
         </div>
+        <button
+            onClick={deleteFoodPlan}
+            disabled={loading}
+            className="delete-plan-button"
+        >
+            {loading ? 'Deleting...' : `Delete ${new Date(activeYear, activeMonth - 1).toLocaleString('default', { month: 'long' })} Plan`}
+        </button>
     </div>
 );
