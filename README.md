@@ -3,6 +3,8 @@
 ## Overview
 Meal Planner is a meal planning calendar application that randomly assigns meals to each day of the month while ensuring no meal is repeated on consecutive days. The meals are stored in an SQLite database, and the app generates a weekly shopping list containing all necessary ingredients for that week.
 
+### Screenshot
+![Initial view](./Screenshot%202025-02-02%20215343.png)
 
 ## Installation & Setup
 
@@ -19,18 +21,24 @@ Meal Planner is a meal planning calendar application that randomly assigns meals
    ```sh
    npm install
    ```
-3. Start the development server:
+3. Start the server:
    ```sh
+   npm run build
    npm start
    ```
+   or start the development server:
+   ```sh
+   npm run dev
+   ```
+
    The application should now be running at `http://localhost:3000/`.
 
-
 ## Usage
-1. Open the app in your browser.
-2. Click on 'Generate [Month] Plan'.
-3. View the generated meal plan for the month.
-4. Check the shopping list all weeks.
-5. Clicking on a day limits the shopping list to the corresponding week.
-
+- The food plan for the current month can be regenerated at any time with the 'Generate <Month> Plan' button.
+- In the accordion menu on the left-hand side, the weekly shopping list(s) can be found by clicking the 'View Detail of Food Plan' button.
+   - When selecting a specific day on the calendar, the shopping list is limited to that week.
+- Meals can be added to the system with the 'Create New Meal' button. The ingredients must be listed, separated by commas.
+- To meet certain constraints when distributing meals over the month, at least five meals must be defined.
+- This repository comes with a number of predefined meals for demonstration purposes; meals can be deleted by clicking on the red minus symbol next to the meal after clicking 'Show All Meals'.
+- Additionally, the plan can be deleted by clicking the 'Delete <Month> Plan' button. This does not delete the specified meals from the system.
 
